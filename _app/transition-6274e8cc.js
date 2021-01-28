@@ -1,0 +1,2 @@
+function t(t){const n=t-1;return n*n*n+1}function n(n,{delay:a=0,duration:o=400,easing:r=t,x:e=0,y:s=0,opacity:i=0}){const c=getComputedStyle(n),p=+c.opacity,u="none"===c.transform?"":c.transform,y=p*(1-i);return{delay:a,duration:o,easing:r,css:(t,n)=>`\n\t\t\ttransform: ${u} translate(${(1-t)*e}px, ${(1-t)*s}px);\n\t\t\topacity: ${p-y*n}`}}export{n as f};
+//# sourceMappingURL=transition-6274e8cc.js.map
