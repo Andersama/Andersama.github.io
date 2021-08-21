@@ -18,6 +18,10 @@ hue-6-2: #e6c07b
 
 */
 
+code.hljs {
+  min-width: fit-content;
+  }
+
 .hljs {
     color: #abb2bf;
     background: #282c34;
