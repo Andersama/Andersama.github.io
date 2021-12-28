@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<title>Break and Continue</title><link rel="stylesheet" href="/normalize.css" data-svelte="svelte-tloy57"><link rel="stylesheet" href="/skeleton.css" data-svelte="svelte-tloy57"><link rel="stylesheet" href="/atom-dark.css" data-svelte="svelte-tloy57"><script src="/chart.min.js" data-svelte="svelte-tloy57"></script><script src="/chartjs_boxplot/index.umd.js" data-svelte="svelte-tloy57"></script><script src="/chartjs_error_bars/index.umd.js" data-svelte="svelte-tloy57"></script>
+
+		
+
+		<link rel="modulepreload" href="/_app/start-abd06728.js">
+		<link rel="modulepreload" href="/_app/chunks/vendor-774d9537.js">
+		<link rel="modulepreload" href="/_app/chunks/paths-28a87002.js">
+		<link rel="modulepreload" href="/_app/pages/__layout.svelte-fd97c867.js">
+		<link rel="modulepreload" href="/_app/pages/blog/[slug].svelte-979b54fe.js">
+		<link rel="stylesheet" href="/_app/assets/start-61d1577b.css">
+		<link rel="stylesheet" href="/_app/assets/pages/__layout.svelte-5e87a37c.css">
+		<link rel="stylesheet" href="/_app/assets/pages/blog/[slug].svelte-52f7b3c4.css">
+
+		<script type="module">
+			import { start } from "/_app/start-abd06728.js";
+			start({
+				target: document.querySelector("#svelte"),
+				paths: {"base":"","assets":""},
+				session: {},
+				host: location.host,
+				route: true,
+				spa: false,
+				trailing_slash: "never",
+				hydrate: {
+					status: 200,
+					error: null,
+					nodes: [
+						import("/_app/pages/__layout.svelte-fd97c867.js"),
+						import("/_app/pages/blog/[slug].svelte-979b54fe.js")
+					],
+					page: {
+						host: location.host, // TODO this is redundant
+						path: "/blog/break and continue",
+						query: new URLSearchParams(""),
+						params: {"slug":"break and continue"}
+					}
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div id="svelte">
+
+
+
+
+<header><div class="container"><nav class="navbar"><a sveltekit:prefetch class="navbar-item navbar-link svelte-fav7xq" href="/">Home</a>
+			<a sveltekit:prefetch class="navbar-item navbar-link svelte-fav7xq" href="/about">About</a>
+			<a sveltekit:prefetch class="navbar-item navbar-link svelte-fav7xq" href="/activity">Activity</a>
+			<a sveltekit:prefetch class="navbar-item navbar-link svelte-fav7xq" href="/gists">Gists</a>
+			<a sveltekit:prefetch class="navbar-item navbar-link svelte-fav7xq" href="/cool-repos">Cool Repos</a>
+			<a sveltekit:prefetch class="navbar-item navbar-link svelte-fav7xq" href="/blog">Blog</a>
+			</nav></div></header>
+
+<main class="container">
+
+<h1 class="title svelte-1mgzh8t">Break and Continue</h1>
+<p class="info"><a href="https://github.com/andersama">Andersama</a> DEC 27, 2021</p>
+<!-- HTML_TAG_START --><p>Consider the following code:</p>
+<pre><code class="hljs language-c"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">size_t</span> i = <span class="hljs-number">0</span>; i &#x3C; <span class="hljs-number">100</span>; i++) {
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">size_t</span> j = <span class="hljs-number">0</span>; j &#x3C; <span class="hljs-number">100</span>; j++) {
+		<span class="hljs-keyword">if</span> (i > <span class="hljs-number">50</span> &#x26;&#x26; j > <span class="hljs-number">50</span>)
+			<span class="hljs-keyword">break</span>;
+		fmt::print(<span class="hljs-string">"[{},{}]"</span>, i, j);
+	}
+	...
+}
+</code></pre>
+<p>Now imagine we could communicate to the compiler directly that we intend to exit the loops altogether from the break. Currently we'd have to either a) duplicate the break condition or b) use a goto with a label.</p>
+<pre><code class="hljs language-c"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">size_t</span> i = <span class="hljs-number">0</span>; i &#x3C; <span class="hljs-number">100</span>; i++) {
+	<span class="hljs-keyword">size_t</span> j = <span class="hljs-number">0</span>;
+	<span class="hljs-keyword">for</span> (; j &#x3C; <span class="hljs-number">100</span>; j++) {
+		<span class="hljs-keyword">if</span> (i > <span class="hljs-number">50</span> &#x26;&#x26; j > <span class="hljs-number">50</span>)
+			<span class="hljs-keyword">break</span>;
+		fmt::print(<span class="hljs-string">"[{},{}]"</span>, i, j);
+	}
+	<span class="hljs-keyword">if</span> (i > <span class="hljs-number">50</span> &#x26;&#x26; j > <span class="hljs-number">50</span>)
+		<span class="hljs-keyword">break</span>;
+}
+</code></pre>
+<pre><code class="hljs language-c"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">size_t</span> i = <span class="hljs-number">0</span>; i &#x3C; <span class="hljs-number">100</span>; i++) {
+	<span class="hljs-keyword">size_t</span> j = <span class="hljs-number">0</span>;
+	<span class="hljs-keyword">for</span> (; j &#x3C; <span class="hljs-number">100</span>; j++) {
+		<span class="hljs-keyword">if</span> (i > <span class="hljs-number">50</span> &#x26;&#x26; j > <span class="hljs-number">50</span>)
+			<span class="hljs-keyword">goto</span> stop_this;
+		fmt::print(<span class="hljs-string">"[{},{}]"</span>, i, j);
+	}
+}
+stop_this:
+</code></pre>
+<p>But here's the tricky bit... technically speaking <code>break</code> is nothing more than a contextualized goto. A <code>break</code> statement (in a loop) unconditionally jumps to the exit of a loop. Granted we normally have a condition surrounding it, but the point stands it's not much more than a shorthand for <code>goto</code>. <code>continue</code> also is similar, except that it jumps to the increment condition followed in some way or form the loop condition.</p>
+<p>Suppose we extend c languages in this way <code>break break</code> a break statement which "breaks" and then "breaks" immediately again. In order to handle the above for example now we could write.</p>
+<pre><code class="hljs language-c"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">size_t</span> i = <span class="hljs-number">0</span>; i &#x3C; <span class="hljs-number">100</span>; i++) {
+	<span class="hljs-keyword">for</span> (<span class="hljs-keyword">size_t</span> j = <span class="hljs-number">0</span>; j &#x3C; <span class="hljs-number">100</span>; j++) {
+		<span class="hljs-keyword">if</span> (i > <span class="hljs-number">50</span> &#x26;&#x26; j > <span class="hljs-number">50</span>)
+			<span class="hljs-keyword">break</span> <span class="hljs-keyword">break</span>;
+		fmt::print(<span class="hljs-string">"[{},{}]"</span>, i, j);
+	}
+	...
+}
+</code></pre>
+<p>But of course, we can do better, we can expand this grammatically to escape however nested our loops (or switch statements) happen to be. EG: <code>break break break</code> could exit out a loop that was 3 deep. Now we can easily communicate a fairly neat optimization with no additional keywords.</p>
+<p>How about this? Suppose we allow <code>break continue</code> in a similar fashion such that we can communicate a break statement which "breaks" and then "continues" immediately afterwards.</p>
+<p>The new c++ grammar would be something like:</p>
+<pre><code class="hljs language-txt">break_stmt:
+	break break_stmt
+	break_stmt continue
+</code></pre>
+<p>This could effectively allow neater hand written code to communicate the intended flow in a loop without jump threading issues.</p><!-- HTML_TAG_END --></main>
+
+<footer class="svelte-fav7xq"><p>© Alex Anderson</p></footer>
+
+
+
+
+			<script type="application/json" data-type="svelte-data" data-url="/blog/break and continue.json">{"status":200,"statusText":"","headers":{"content-type":"text/plain;charset=UTF-8"},"body":"{\"metadata\":{\"title\":\"Break and Continue\",\"date\":\"Dec 27, 2021\",\"excerpt\":\"A silly thought experiment\"},\"content\":\"\u003Cp\u003EConsider the following code:\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"hljs language-c\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Efor\u003C\u002Fspan\u003E (\u003Cspan class=\\\"hljs-keyword\\\"\u003Esize_t\u003C\u002Fspan\u003E i = \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E; i &#x3C; \u003Cspan class=\\\"hljs-number\\\"\u003E100\u003C\u002Fspan\u003E; i++) {\\n\\t\u003Cspan class=\\\"hljs-keyword\\\"\u003Efor\u003C\u002Fspan\u003E (\u003Cspan class=\\\"hljs-keyword\\\"\u003Esize_t\u003C\u002Fspan\u003E j = \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E; j &#x3C; \u003Cspan class=\\\"hljs-number\\\"\u003E100\u003C\u002Fspan\u003E; j++) {\\n\\t\\t\u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (i \u003E \u003Cspan class=\\\"hljs-number\\\"\u003E50\u003C\u002Fspan\u003E &#x26;&#x26; j \u003E \u003Cspan class=\\\"hljs-number\\\"\u003E50\u003C\u002Fspan\u003E)\\n\\t\\t\\t\u003Cspan class=\\\"hljs-keyword\\\"\u003Ebreak\u003C\u002Fspan\u003E;\\n\\t\\tfmt::print(\u003Cspan class=\\\"hljs-string\\\"\u003E\\\"[{},{}]\\\"\u003C\u002Fspan\u003E, i, j);\\n\\t}\\n\\t...\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003ENow imagine we could communicate to the compiler directly that we intend to exit the loops altogether from the break. Currently we'd have to either a) duplicate the break condition or b) use a goto with a label.\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"hljs language-c\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Efor\u003C\u002Fspan\u003E (\u003Cspan class=\\\"hljs-keyword\\\"\u003Esize_t\u003C\u002Fspan\u003E i = \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E; i &#x3C; \u003Cspan class=\\\"hljs-number\\\"\u003E100\u003C\u002Fspan\u003E; i++) {\\n\\t\u003Cspan class=\\\"hljs-keyword\\\"\u003Esize_t\u003C\u002Fspan\u003E j = \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E;\\n\\t\u003Cspan class=\\\"hljs-keyword\\\"\u003Efor\u003C\u002Fspan\u003E (; j &#x3C; \u003Cspan class=\\\"hljs-number\\\"\u003E100\u003C\u002Fspan\u003E; j++) {\\n\\t\\t\u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (i \u003E \u003Cspan class=\\\"hljs-number\\\"\u003E50\u003C\u002Fspan\u003E &#x26;&#x26; j \u003E \u003Cspan class=\\\"hljs-number\\\"\u003E50\u003C\u002Fspan\u003E)\\n\\t\\t\\t\u003Cspan class=\\\"hljs-keyword\\\"\u003Ebreak\u003C\u002Fspan\u003E;\\n\\t\\tfmt::print(\u003Cspan class=\\\"hljs-string\\\"\u003E\\\"[{},{}]\\\"\u003C\u002Fspan\u003E, i, j);\\n\\t}\\n\\t\u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (i \u003E \u003Cspan class=\\\"hljs-number\\\"\u003E50\u003C\u002Fspan\u003E &#x26;&#x26; j \u003E \u003Cspan class=\\\"hljs-number\\\"\u003E50\u003C\u002Fspan\u003E)\\n\\t\\t\u003Cspan class=\\\"hljs-keyword\\\"\u003Ebreak\u003C\u002Fspan\u003E;\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"hljs language-c\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Efor\u003C\u002Fspan\u003E (\u003Cspan class=\\\"hljs-keyword\\\"\u003Esize_t\u003C\u002Fspan\u003E i = \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E; i &#x3C; \u003Cspan class=\\\"hljs-number\\\"\u003E100\u003C\u002Fspan\u003E; i++) {\\n\\t\u003Cspan class=\\\"hljs-keyword\\\"\u003Esize_t\u003C\u002Fspan\u003E j = \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E;\\n\\t\u003Cspan class=\\\"hljs-keyword\\\"\u003Efor\u003C\u002Fspan\u003E (; j &#x3C; \u003Cspan class=\\\"hljs-number\\\"\u003E100\u003C\u002Fspan\u003E; j++) {\\n\\t\\t\u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (i \u003E \u003Cspan class=\\\"hljs-number\\\"\u003E50\u003C\u002Fspan\u003E &#x26;&#x26; j \u003E \u003Cspan class=\\\"hljs-number\\\"\u003E50\u003C\u002Fspan\u003E)\\n\\t\\t\\t\u003Cspan class=\\\"hljs-keyword\\\"\u003Egoto\u003C\u002Fspan\u003E stop_this;\\n\\t\\tfmt::print(\u003Cspan class=\\\"hljs-string\\\"\u003E\\\"[{},{}]\\\"\u003C\u002Fspan\u003E, i, j);\\n\\t}\\n}\\nstop_this:\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003EBut here's the tricky bit... technically speaking \u003Ccode\u003Ebreak\u003C\u002Fcode\u003E is nothing more than a contextualized goto. A \u003Ccode\u003Ebreak\u003C\u002Fcode\u003E statement (in a loop) unconditionally jumps to the exit of a loop. Granted we normally have a condition surrounding it, but the point stands it's not much more than a shorthand for \u003Ccode\u003Egoto\u003C\u002Fcode\u003E. \u003Ccode\u003Econtinue\u003C\u002Fcode\u003E also is similar, except that it jumps to the increment condition followed in some way or form the loop condition.\u003C\u002Fp\u003E\\n\u003Cp\u003ESuppose we extend c languages in this way \u003Ccode\u003Ebreak break\u003C\u002Fcode\u003E a break statement which \\\"breaks\\\" and then \\\"breaks\\\" immediately again. In order to handle the above for example now we could write.\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"hljs language-c\\\"\u003E\u003Cspan class=\\\"hljs-keyword\\\"\u003Efor\u003C\u002Fspan\u003E (\u003Cspan class=\\\"hljs-keyword\\\"\u003Esize_t\u003C\u002Fspan\u003E i = \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E; i &#x3C; \u003Cspan class=\\\"hljs-number\\\"\u003E100\u003C\u002Fspan\u003E; i++) {\\n\\t\u003Cspan class=\\\"hljs-keyword\\\"\u003Efor\u003C\u002Fspan\u003E (\u003Cspan class=\\\"hljs-keyword\\\"\u003Esize_t\u003C\u002Fspan\u003E j = \u003Cspan class=\\\"hljs-number\\\"\u003E0\u003C\u002Fspan\u003E; j &#x3C; \u003Cspan class=\\\"hljs-number\\\"\u003E100\u003C\u002Fspan\u003E; j++) {\\n\\t\\t\u003Cspan class=\\\"hljs-keyword\\\"\u003Eif\u003C\u002Fspan\u003E (i \u003E \u003Cspan class=\\\"hljs-number\\\"\u003E50\u003C\u002Fspan\u003E &#x26;&#x26; j \u003E \u003Cspan class=\\\"hljs-number\\\"\u003E50\u003C\u002Fspan\u003E)\\n\\t\\t\\t\u003Cspan class=\\\"hljs-keyword\\\"\u003Ebreak\u003C\u002Fspan\u003E \u003Cspan class=\\\"hljs-keyword\\\"\u003Ebreak\u003C\u002Fspan\u003E;\\n\\t\\tfmt::print(\u003Cspan class=\\\"hljs-string\\\"\u003E\\\"[{},{}]\\\"\u003C\u002Fspan\u003E, i, j);\\n\\t}\\n\\t...\\n}\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003EBut of course, we can do better, we can expand this grammatically to escape however nested our loops (or switch statements) happen to be. EG: \u003Ccode\u003Ebreak break break\u003C\u002Fcode\u003E could exit out a loop that was 3 deep. Now we can easily communicate a fairly neat optimization with no additional keywords.\u003C\u002Fp\u003E\\n\u003Cp\u003EHow about this? Suppose we allow \u003Ccode\u003Ebreak continue\u003C\u002Fcode\u003E in a similar fashion such that we can communicate a break statement which \\\"breaks\\\" and then \\\"continues\\\" immediately afterwards.\u003C\u002Fp\u003E\\n\u003Cp\u003EThe new c++ grammar would be something like:\u003C\u002Fp\u003E\\n\u003Cpre\u003E\u003Ccode class=\\\"hljs language-txt\\\"\u003Ebreak_stmt:\\n\\tbreak break_stmt\\n\\tbreak_stmt continue\\n\u003C\u002Fcode\u003E\u003C\u002Fpre\u003E\\n\u003Cp\u003EThis could effectively allow neater hand written code to communicate the intended flow in a loop without jump threading issues.\u003C\u002Fp\u003E\"}"}</script>
+		</div>
+		<!--Traffic-->
+		<script async defer
+		 data-website-id="64a6ac0c-d6ba-4020-8e6a-598695803b90" 
+		 src="https://andersama-umami.vercel.app/umami.js"
+		 data-do-not-track="true"
+		 data-domains="andersama.github.io"></script>
+	</body>
+</html>
