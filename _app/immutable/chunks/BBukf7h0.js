@@ -1,0 +1,1 @@
+import{z as f,r as u,aj as _,ak as o,m as t,C as g,a4 as i,x as l,w as r,y as m,B as p}from"./DPow9XtE.js";function C(d,n){let a=null,y=t;var s;if(t){a=m;for(var e=p(document.head);e!==null&&(e.nodeType!==g||e.data!==d);)e=i(e);if(e===null)l(!1);else{var E=i(e);e.remove(),r(E)}}t||(s=document.head.appendChild(f()));try{u(()=>n(s),_|o)}finally{y&&(l(!0),r(a))}}export{C as h};

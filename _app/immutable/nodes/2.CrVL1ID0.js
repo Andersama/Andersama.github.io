@@ -1,0 +1,2 @@
+import{t as e,a}from"../chunks/CppqSQWl.js";import"../chunks/DwPF1q1B.js";import{n}from"../chunks/DPow9XtE.js";function s(t){n();var o=e(`Hello and welcome to my profile / project page, if you're curious to follow my shinanigans on github check the activity page.
+If you want to take a peak at some code snippets take a look at gists, and for anything I've written visit the blog.`);a(t,o)}export{s as component};
