@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link href="../_app/immutable/entry/start.CVguwTJo.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/daIVw2z0.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/BQfckOSY.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/nn_Yq1f4.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/DjXS6wJg.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/C_6BxxAK.js" rel="modulepreload">
+		<link href="../_app/immutable/entry/app.DP7Zrgqi.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/PPVm8Dsz.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/BdNLK9Ws.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/B3KKMlPP.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/B2GrXMXv.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/DFRM7aIo.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/MrCyob-z.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/B0jMjPD3.js" rel="modulepreload">
+		<link href="../_app/immutable/nodes/0.CVcDdpur.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/qQQSXsxM.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/C9Vuyvrt.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/WaFCIcEm.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/y2FSC2MC.js" rel="modulepreload">
+		<link href="../_app/immutable/nodes/6.DOX5B2nn.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/DK5DwBla.js" rel="modulepreload">
+		<!--12qhfyh--><link rel="stylesheet" href="/normalize.css"/> <link rel="stylesheet" href="/skeleton.css"/> <link rel="stylesheet" href="/prism.css"/>  <script defer="" src="https://stats.alignofcode.com/script.js" data-website-id="d03c4fcd-ae4b-4081-a1a6-6080ef076987"></script><!----><!--1teoznn--><meta property="og:title" content="C++ Vectors"/> <meta name="description" content="A rough outline of why C++ vectors are incredibly useful."/> <script src="https://unpkg.com/chart.js@4"></script> <script src="https://unpkg.com/@sgratzl/chartjs-chart-boxplot@4"></script><!----><title>C++ Vectors</title>
+		<link href="../_app/immutable/assets/_layout.J5ztlLn1.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/6.CiYN3QkM.css" rel="stylesheet">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents"><!--[--><!--[0--><!--[--><header><div class="container"><nav class="navbar"><a class="navbar-item navbar-link svelte-12qhfyh" href="/">Home</a> <a class="navbar-item navbar-link svelte-12qhfyh" href="/about">About</a> <a class="navbar-item navbar-link svelte-12qhfyh" href="/activity">Activity</a> <a class="navbar-item navbar-link svelte-12qhfyh" href="/gists">Gists</a> <a class="navbar-item navbar-link svelte-12qhfyh" href="/cool-repos">Cool Repos</a> <a class="navbar-item navbar-link svelte-12qhfyh" href="/blog">Blog</a></nav></div></header> <main class="container"><!--[--><!--[--><h1 class="title svelte-1teoznn">C++ Vectors</h1> <p class="info"><a href="https://github.com/andersama">Andersama</a> Friday, June 19, 2026</p>  <p>Let’s dive into why C++ vectors are so useful. Here’s a short breakdown of why dynamic contiguous containers are foundational concept and
+valuable tool in modern programming:</p> <h1>Full Control of Memory</h1> <p>C++‘s vectors are the quintessential version of the simplest typed container, a space of memory split into well defined chunks. At a high level they represent a single pointer to a region of memory, a known capacity and a known size. With these three values programmers can work within a memory region with the implicit understanding of where their objects reside, and which are initialized or not.</p> <p>This simple idea may not be all that impressive, however keeping things simple can often be a highly performant option when programming. This can be the building block for an incredible number of other more complex containers.</p> <p>The benefit of a dynamic container like C++‘s vector is that the memory management can be modified. More than just the simple act of keeping track of a pointer, programmers can also make modifications to the allocator, the portion of the program responsible for managing the pointer used by the vector. This allows programmers to make use of memory in a vector format without necessarily needing to hammer the operating system for new allocations. These modifications can so far as to eliminate allocations entirely, by abstracting the allocator to using a fixed size region of memory (this may not be as dynamic as one would expect, but still incredibly useful because of its performance), the allocator may simply be returning a pointer to a section of memory already inside of the program, no system calls or other complex interactions with the operating system required.</p> <h1>Allocate and Free when you need to~</h1> <p>C++ and C don’t typically have containers which allocate just because a variable has been declared. Most will only allocate at the moment when the container has reached its capacity. Programmers will often attempt to predict heavy usage of memory and reserve larger chunks when necessary. This approach means C and C++ programs often don’t have a “garbage collector”, which can often be an expensive operation, as each object and container is typically expected to maintain its own state. Pointers are freed back to their originating allocator typically immediately after the container has expanded.</p> <pre class="language-cpp"><!----><code class="language-cpp">std<span class="token double-colon punctuation">::</span>vector<span class="token operator">&lt;</span><span class="token keyword">int</span><span class="token operator">></span> data<span class="token punctuation">;</span> <span class="token comment">//no allocations just because we know we'll need a container</span></code><!----></pre> <h1>Direct initialization into the container</h1> <p>C++ makes a point of allowing the programmer to initialize structures inside of the container directly as opposed to creating an object which will get copied or moved into the container. More than that, the C++ library and compiler designers are fundamentally aware of the performance penalties of unnecessary moves and copies, so you’ll typically find that for a simple container like a <code>vector</code>, any operations creating a new object like insertions or pushes will be highly optimized.</p> <pre class="language-cpp"><!----><code class="language-cpp"><span class="token keyword">struct</span> <span class="token class-name">person</span> <span class="token punctuation">&#123;</span>
+    std<span class="token double-colon punctuation">::</span>string_view name<span class="token punctuation">;</span>
+    <span class="token keyword">int</span>              height_mm<span class="token punctuation">;</span>
+    <span class="token keyword">int</span>              exercise_watts_avg<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">char</span>    age<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
+std<span class="token double-colon punctuation">::</span>vector<span class="token operator">&lt;</span>person<span class="token operator">></span> health_data<span class="token punctuation">;</span>
+health_data<span class="token punctuation">.</span><span class="token function">emplace_back</span><span class="token punctuation">(</span><span class="token string">"John"</span><span class="token punctuation">,</span> <span class="token number">1677</span><span class="token punctuation">,</span> <span class="token number">145</span><span class="token punctuation">,</span> <span class="token number">38</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">//</span></code><!----></pre><!----> <span></span><!--]--><!--]--></main> <footer class="svelte-12qhfyh"><p>© Alex Anderson</p></footer><!--]--><!--]--> <!--[-1--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_1ecsh78 = {
+						base: new URL("..", location).pathname.slice(0, -1)
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.CVguwTJo.js"),
+						import("../_app/immutable/entry/app.DP7Zrgqi.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 6],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
